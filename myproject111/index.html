@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Professional Currency Converter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #4e4376, #2b5876);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      text-align: center;
+      width: 400px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    select, input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌍 Currency Converter</h1>
+
+    <form id="currency-form">
+      <input type="number" name="amount" placeholder="Enter amount" required />
+
+      <select name="from" required>
+        <option value="" disabled selected>From Currency</option>
+        <option value="USD">🇺🇸 USD – US Dollar</option>
+        <option value="INR">🇮🇳 INR – Indian Rupee</option>
+        <option value="EUR">🇪🇺 EUR – Euro</option>
+        <option value="GBP">🇬🇧 GBP – British Pound</option>
+        <option value="JPY">🇯🇵 JPY – Japanese Yen</option>
+        <option value="CAD">🇨🇦 CAD – Canadian Dollar</option>
+        <option value="AUD">🇦🇺 AUD – Australian Dollar</option>
+        <option value="CHF">🇨🇭 CHF – Swiss Franc</option>
+        <option value="CNY">🇨🇳 CNY – Chinese Yuan</option>
+        <option value="AED">🇦🇪 AED – UAE Dirham</option>
+      </select>
+
+      <select name="to" required>
+        <option value="" disabled selected>To Currency</option>
+        <option value="USD">🇺🇸 USD – US Dollar</option>
+        <option value="INR">🇮🇳 INR – Indian Rupee</option>
+        <option value="EUR">🇪🇺 EUR – Euro</option>
+        <option value="GBP">🇬🇧 GBP – British Pound</option>
+        <option value="JPY">🇯🇵 JPY – Japanese Yen</option>
+        <option value="CAD">🇨🇦 CAD – Canadian Dollar</option>
+        <option value="AUD">🇦🇺 AUD – Australian Dollar</option>
+        <option value="CHF">🇨🇭 CHF – Swiss Franc</option>
+        <option value="CNY">🇨🇳 CNY – Chinese Yuan</option>
+        <option value="AED">🇦🇪 AED – UAE Dirham</option>
+      </select>
+
+      <button type="submit">Convert</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <div id="loading" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);z-index:9999;text-align:center;padding-top:200px;font-size:30px;color:white;">
+    🔄 Converting...
+  </div>
+
+  <script>
+    function showLoading() {
+      document.getElementById('loading').style.display = 'block';
+    }
+
+    function hideLoading() {
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    document.getElementById("currency-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      showLoading();
+
+      const formData = new FormData(e.target);
+      const params = new URLSearchParams(formData).toString();
+
+      fetch("CurrencyConverterServlet?" + params)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("result").innerText = "Converted Amount: " + data;
+          hideLoading();
+        })
+        .catch(() => {
+          document.getElementById("result").innerText = "Conversion failed.";
+          hideLoading();
+        });
+    });
+  </script>
+</body>
+</html>
